@@ -133,8 +133,7 @@ def step3(bugly, cfg, crashId, appId, pid):
     with open(name+'_appDetail.json','w') as f:
         f.write(json.dumps(appDetailCrash['ret']))
 
-    #save_cfg(cfg)
-    #return False
+    print(name, 'OK')
     return True
 
 def start_spider():

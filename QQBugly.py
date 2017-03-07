@@ -174,8 +174,12 @@ class Bugly:
             par = {}
         par['fsn'] = self.get_fsn()
         r = self.requests.get(url, params = par, headers = self.headers)
-        time.sleep(2)
-        return json.loads(r.text)
+        time.sleep(1)
+        try:
+            obj = json.loads(r.text)
+            return obj
+        except Exception as e:
+            print(r.text)
 		
 if __name__ == '__main__':
     pass
