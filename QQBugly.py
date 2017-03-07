@@ -5,7 +5,7 @@ if __name__ == '__main__':
 else:
     import tea
 
-import requests, re, os, tempfile, random
+import requests, re, os, tempfile, random, time, json
 import base64, hashlib, rsa, binascii
 
 
@@ -15,6 +15,7 @@ class Bugly:
     urlLoginQQ  = 'https://xui.ptlogin2.qq.com/cgi-bin/xlogin'
     urlCheck    = 'https://ssl.ptlogin2.qq.com/check'
     urlLogin    = 'https://ssl.ptlogin2.qq.com/login'
+    urlAppList  = 'https://bugly.qq.com/v2/users/null/appList'
     urlReferer	= 'https://cas.bugly.qq.com/cas/loginBack?type=9'
     urlSig      = ''
     
@@ -135,6 +136,21 @@ class Bugly:
     def check_sig(self):
         r = self.requests.get(self.urlSig, headers = self.headers)
         self.headers['x-token'] = str(self.get_xtoken())
+        self.app_list()
+        
+    def app_list(self):
+        par = {
+			'userId':self.qq,
+        }
+        r = self.requests.get(self.urlAppList, params=par, headers=self.headers)
+        self.appList = json.loads(r.text)['ret']
+        #print(self.appList)
+        
+    def get_appId_by_pid(self, pid):
+        for item in self.appList:
+            if item['pid'] == pid:
+                return item['appId']
+        return ''
         
     def get_xtoken(self):         
         number = self.requests.cookies["token-skey"]
@@ -158,7 +174,8 @@ class Bugly:
             par = {}
         par['fsn'] = self.get_fsn()
         r = self.requests.get(url, params = par, headers = self.headers)
-        return r.text
-
+        time.sleep(2)
+        return json.loads(r.text)
+		
 if __name__ == '__main__':
     pass
