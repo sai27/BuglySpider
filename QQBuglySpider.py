@@ -37,10 +37,11 @@ class BuglySpider:
             if self.__runIssueList() == True:
                 return True
         except Exception as e:
-            print('发生异常:')
+            print('run发生异常:')
             print(str(e))
             print(traceback.print_exc())
             return False
+        return False
             
     def __runIssueList(self):
         print('获取错误列表长度...')

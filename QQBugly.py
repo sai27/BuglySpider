@@ -5,7 +5,7 @@ if __name__ == '__main__':
 else:
     import tea
 
-import requests, re, os, tempfile, random, time, json
+import requests, re, os, tempfile, random, time, json, traceback
 import base64, hashlib, rsa, binascii
 
 
@@ -158,11 +158,21 @@ class Bugly:
         if par is None:
             par = {}
         par['fsn'] = self.get_fsn()
-        r = self.requests.get(url, params = par, headers = self.headers)
-        jsonData = json.loads(r.text)
-        if jsonData['status'] != 200:
-            return None
-        return jsonData['ret']
-		
+        while(True):
+            try:
+                r = self.requests.get(url, params = par, headers = self.headers, timeout=10)
+            except Exception as e:
+                print('http请求超时,重新请求:',url)
+                continue
+                
+            try:
+                jsonData = json.loads(r.text)
+                if jsonData['status'] != 200:
+                    return None
+                return jsonData['ret']
+            except Exception as e:
+                print(r.text)
+                continue
+
 if __name__ == '__main__':
     pass
