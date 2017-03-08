@@ -7,6 +7,7 @@ class BuglySpider:
     workplace           = ''
     appId               = ''
     pid                 = ''
+    version             = ''
     urlIssueList        = 'https://bugly.qq.com/v2/issueList'
     urlCrashList        = 'https://bugly.qq.com/v2/crashList'
     urlCrashDoc         = 'https://bugly.qq.com/v2/crashDoc/appId/%(appId)s/platformId/%(pid)s/crashHash/%(crashId)s'
@@ -14,7 +15,7 @@ class BuglySpider:
     issueIdx            = 0
     crashIdx            = 0
     bugly               = None
-    def __init__(self, qq, pwd, workplace, appId, pid):
+    def __init__(self, qq, pwd, workplace, appId, pid, version):
         print('开始登陆...')
         self.bugly = QQBugly.Bugly(qq,pwd)
         if os.path.exists(workplace) == False:
@@ -23,7 +24,7 @@ class BuglySpider:
         self.workplace = workplace
         self.appId = appId
         self.pid = pid
-        
+        self.version = version
         if os.path.isfile('cfg.json') == True:
             with open('cfg.json', 'r') as f:
                 file = f.read()
@@ -52,6 +53,7 @@ class BuglySpider:
             'pid':self.pid,
             'exceptionTypeList':'AllCatched,Unity3D,Lua,JS',
             'sortOrder':'desc',
+            'version':self.version,
             'sortField':'crashCount',
             'appId':self.appId,
             'platformId':'1',
@@ -74,6 +76,7 @@ class BuglySpider:
                 'pid':self.pid,
                 'exceptionTypeList':'AllCatched,Unity3D,Lua,JS',
                 'sortOrder':'desc',
+                'version':self.version,
                 'sortField':'crashCount',
                 'appId':self.appId,
                 'platformId':'1',
@@ -106,6 +109,7 @@ class BuglySpider:
             'platformId':1,
             'rows':'10',
             'issueId':issueId,
+            'version':self.version,
             })
     
         if jsonData == None:
@@ -129,6 +133,7 @@ class BuglySpider:
                 'platformId':1,
                 'rows':'50',
                 'issueId':issueId,
+                'version':self.version,
                 })
         
             if jsonData == None:

@@ -158,7 +158,13 @@ class Bugly:
         if par is None:
             par = {}
         par['fsn'] = self.get_fsn()
+        
+        anti_times = 0
+        
         while(True):
+            if anti_times >= 5:
+                print("多次返回反爬虫页面，歇一会重新建立连接试试..")
+                return None
             try:
                 r = self.requests.get(url, params = par, headers = self.headers, timeout=10)
             except Exception as e:
@@ -172,6 +178,7 @@ class Bugly:
                 return jsonData['ret']
             except Exception as e:
                 print(r.text)
+                anti_times += 1
                 continue
 
 if __name__ == '__main__':
