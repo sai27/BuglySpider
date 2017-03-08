@@ -46,7 +46,7 @@ class BuglySpider:
             
     def __runIssueList(self):
         print('获取错误列表长度...')
-        self.__random_wait(1,1.5)
+        self.__random_wait(1,1)
         jsonData = self.bugly.get(self.urlIssueList, {
             'start':0,
             'searchType':'errorType',
@@ -69,7 +69,7 @@ class BuglySpider:
         while self.issueIdx < issueNum:
             page = self.issueIdx - self.issueIdx%50
             print('获取错误列表分页[%(page)d]...'%{'page':page})
-            self.__random_wait(1,1.5)
+            self.__random_wait(1,1)
             jsonData = self.bugly.get(self.urlIssueList, {
                 'start':str(page),
                 'searchType':'errorType',
@@ -92,12 +92,13 @@ class BuglySpider:
                 if (self.__runCrashList(issueId)== False):
                     return False
                 self.issueIdx+=1
+                self.crashIdx=0
                 self.__save_cfg()
         return True
         
     def __runCrashList(self, issueId):
         print('获取机型列表长度...')
-        self.__random_wait(1,1.5)
+        self.__random_wait(1,1)
         jsonData = self.bugly.get(self.urlCrashList, {
             'start':0,
             'searchType':'detail',
@@ -121,7 +122,7 @@ class BuglySpider:
         while self.crashIdx < crashNum:
             page = self.crashIdx - self.crashIdx%50
             print('获取机型列表分页[%(page)d]...'%{'page':page})
-            self.__random_wait(1,1.5)
+            self.__random_wait(1,1)
             jsonData = self.bugly.get(self.urlCrashList, {
                 'start':str(page),
                 'searchType':'detail',
@@ -147,7 +148,7 @@ class BuglySpider:
                 self.crashIdx += 1
                 self.__save_cfg()
             #每拉取50个，随机休息20-30s
-            self.__random_wait(20,30)
+            self.__random_wait(5,5)
         return True
         
     def __runCrashDetail(self, crashId):
@@ -156,23 +157,25 @@ class BuglySpider:
         if os.path.isfile(name+'_crashDoc.json') == False:
             #print('拉取机型CrashDoc信息%(name)s...'%{'name':name})
             crashDocUrl = self.urlCrashDoc%{'appId':self.appId, 'pid':self.pid, 'crashId':crashId}
-            self.__random_wait(1,1.5)
+            self.__random_wait(0.5,0.5)
             crashDoc = self.bugly.get(crashDocUrl)
-            if crashDoc == None:
-                return False
-            with open(name+'_crashDoc.json','w') as f:
-                f.write(json.dumps(crashDoc))
-        
+            if crashDoc != None:
+                with open(name+'_crashDoc.json','w') as f:
+                    f.write(json.dumps(crashDoc))
+            else:
+                print('忽略文件:',name+'_crashDoc.json')
+                
         if os.path.isfile(name+'_appDetail.json') == False:
             #print('拉取机型AppDetail信息%(name)s...'%{'name':name})
             appDetailCrashUrl = self.urlAppDetailCrash%{'appId':self.appId, 'pid':self.pid, 'crashId':crashId}
             #self.__random_wait(1,1.5)
             appDetailCrash = self.bugly.get(appDetailCrashUrl)
-            if appDetailCrash == None:
-                return False
-            with open(name+'_appDetail.json','w') as f:
-                f.write(json.dumps(appDetailCrash))
-
+            if appDetailCrash != None:
+                with open(name+'_appDetail.json','w') as f:
+                    f.write(json.dumps(appDetailCrash))
+            else:
+                print('忽略文件:',name+'_appDetail.json')
+                
         print('机型信息%(name)s存储完成...'%{'name':name})
         return True
         

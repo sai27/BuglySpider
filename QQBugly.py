@@ -163,7 +163,7 @@ class Bugly:
         
         while(True):
             if anti_times >= 5:
-                print("多次返回反爬虫页面，歇一会重新建立连接试试..")
+                print('尝试5次获取json文件不成功..不再尝试..')
                 return None
             try:
                 r = self.requests.get(url, params = par, headers = self.headers, timeout=10)
