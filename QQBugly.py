@@ -136,21 +136,6 @@ class Bugly:
     def check_sig(self):
         r = self.requests.get(self.urlSig, headers = self.headers)
         self.headers['x-token'] = str(self.get_xtoken())
-        self.app_list()
-        
-    def app_list(self):
-        par = {
-			'userId':self.qq,
-        }
-        r = self.requests.get(self.urlAppList, params=par, headers=self.headers)
-        self.appList = json.loads(r.text)['ret']
-        #print(self.appList)
-        
-    def get_appId_by_pid(self, pid):
-        for item in self.appList:
-            if item['pid'] == pid:
-                return item['appId']
-        return ''
         
     def get_xtoken(self):         
         number = self.requests.cookies["token-skey"]
@@ -174,12 +159,10 @@ class Bugly:
             par = {}
         par['fsn'] = self.get_fsn()
         r = self.requests.get(url, params = par, headers = self.headers)
-        time.sleep(1)
-        try:
-            obj = json.loads(r.text)
-            return obj
-        except Exception as e:
-            print(r.text)
+        jsonData = json.loads(r.text)
+        if jsonData['status'] != 200:
+            return None
+        return jsonData['ret']
 		
 if __name__ == '__main__':
     pass
