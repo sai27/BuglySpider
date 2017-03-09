@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-
-if __name__ == '__main__':
-    import tea
-else:
-    import tea
-
+ 
+import tea
 import requests, re, os, tempfile, random, time, json, traceback
 import base64, hashlib, rsa, binascii
 

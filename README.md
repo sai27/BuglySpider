@@ -16,6 +16,7 @@ QQ登录部分参考了项目[qqlib](https://github.com/JetLua/qqlib)
 使用
 ---
 ``` python
-spider = QQBuglySpider.BuglySpider('qq','pwd', 'outpath', 'appId', 'pid', 'version')
-spider_over = spider.run()
+from BuglySpider import Spider
+spider = Spider('qq','pwd', 'outpath', 'appId', 'pid', 'version')
+spider.run()
 ```

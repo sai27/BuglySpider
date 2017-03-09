@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import QQBugly
+from BuglyLogin import Bugly
 import json, time, os, random, traceback
 
-class BuglySpider:
+class Spider:
     workplace           = ''
     appId               = ''
     pid                 = ''
@@ -17,7 +17,7 @@ class BuglySpider:
     bugly               = None
     def __init__(self, qq, pwd, workplace, appId, pid, version):
         print('开始登陆...')
-        self.bugly = QQBugly.Bugly(qq,pwd)
+        self.bugly = Bugly(qq,pwd)
         if os.path.exists(workplace) == False:
             os.mkdir(workplace)
         os.chdir(workplace)
@@ -191,5 +191,5 @@ class BuglySpider:
         time.sleep(random.uniform(min,max))
         
 if __name__ == '__main__':
-    spider = BuglySpider('qq','pwd', 'outpath', 'appId', 'pid', 'version')
+    spider = Spider('qq','pwd', 'outpath', 'appId', 'pid', 'version')
     spider.run()
