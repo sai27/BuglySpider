@@ -191,5 +191,5 @@ class BuglySpider:
         time.sleep(random.uniform(min,max))
         
 if __name__ == '__main__':
-    spider = BuglySpider('qq','pwd', 'D:/bugly_content/', 'appId', 'pid')
+    spider = BuglySpider('qq','pwd', 'outpath', 'appId', 'pid', 'version')
     spider.run()
