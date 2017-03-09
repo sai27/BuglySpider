@@ -1,4 +1,4 @@
-# QQBugly for python
+# Spider for Tencent Bugly with python
 ---
 对bugly平台中的错误分析进行本地拉取，方便后续进一步统一分析与处理项目产生的错误日志
 
